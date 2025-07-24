@@ -1,12 +1,3 @@
-/*
- * @Author: Justin
- * @Date: 2025-07-21 05:59:00
- * @filename:
- * @version:
- * @Description:
- * @LastEditTime: 2025-07-21 08:51:59
- */
-
 package httpserver
 
 import (
@@ -19,9 +10,10 @@ import (
 	clog "github.com/kpango/glg"
 )
 
+// SingleConfig 单个配置
 var SingleConfig *config.SingleConfig
 
-// 1. 接收 初始化config
+// HandleConfig 接收并初始化 config
 func HandleConfig(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -44,7 +36,7 @@ func HandleConfig(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-// 2. 启动链
+// HandleStartChain 启动链
 func HandleStartChain(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -53,6 +45,8 @@ func HandleStartChain(w http.ResponseWriter, r *http.Request) {
 	body, _ := io.ReadAll(r.Body)
 
 	clog.Infof("📥 [%s] Body: %s\n", "/startChain", string(body))
+
+	// TODO: 启动链逻辑
 
 	resp := Response{
 		Status:  "success",
@@ -64,7 +58,7 @@ func HandleStartChain(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-// 3. 部署合约 初始化合约
+// HandleSetupContracts 部署合约与初始化合约
 func HandleSetupContracts(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -73,6 +67,8 @@ func HandleSetupContracts(w http.ResponseWriter, r *http.Request) {
 	body, _ := io.ReadAll(r.Body)
 
 	clog.Infof("📥 [%s] Body: %s\n", "/setupContracts", string(body))
+
+	// TODO: 部署合约与初始化合约逻辑
 
 	resp := Response{
 		Status:  "success",
@@ -84,7 +80,7 @@ func HandleSetupContracts(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-// 4. 启动 relayer
+// HandleStartRelayer 启动 relayer
 func HandleStartRelayer(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -93,6 +89,8 @@ func HandleStartRelayer(w http.ResponseWriter, r *http.Request) {
 	body, _ := io.ReadAll(r.Body)
 
 	clog.Infof("📥 [%s] Body: %s\n", "/startRelayer", string(body))
+
+	// TODO: 启动 relayer 逻辑
 
 	resp := Response{
 		Status:  "success",
@@ -104,7 +102,7 @@ func HandleStartRelayer(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-// 5. 向 verify server 注册 relayer
+// HandleSubscribeRelayer 向 verify server 注册 relayer
 func HandleSubscribeRelayer(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -113,6 +111,8 @@ func HandleSubscribeRelayer(w http.ResponseWriter, r *http.Request) {
 	body, _ := io.ReadAll(r.Body)
 
 	clog.Infof("📥 [%s] Body: %s\n", "/subscribeRelayer", string(body))
+
+	// TODO: 向 verify server 注册 relayer 逻辑
 
 	resp := Response{
 		Status:  "success",

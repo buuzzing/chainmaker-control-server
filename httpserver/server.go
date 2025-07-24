@@ -1,11 +1,3 @@
-/*
- * @Author: Justin
- * @Date: 2025-07-21 03:14:30
- * @filename:
- * @version:
- * @Description:
- * @LastEditTime: 2025-07-21 06:47:34
- */
 package httpserver
 
 import (
@@ -14,6 +6,7 @@ import (
 	clog "github.com/kpango/glg"
 )
 
+// Response 自定义响应结构体
 type Response struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
