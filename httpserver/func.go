@@ -36,28 +36,6 @@ func HandleConfig(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-// HandleStartChain 启动链
-func HandleStartChain(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-	body, _ := io.ReadAll(r.Body)
-
-	clog.Infof("📥 [%s] Body: %s\n", "/startChain", string(body))
-
-	// TODO: 启动链逻辑
-
-	resp := Response{
-		Status:  "success",
-		Message: fmt.Sprintf("%s received", "/startChain"),
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(resp)
-}
-
 // HandleSetupContracts 部署合约与初始化合约
 func HandleSetupContracts(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
