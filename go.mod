@@ -1,6 +1,6 @@
 module test_server
 
-go 1.22.10
+go 1.23
 
 require (
 	github.com/BurntSushi/toml v1.5.0
