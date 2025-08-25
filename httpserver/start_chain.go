@@ -179,7 +179,7 @@ func checkAllNecessary() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	logFilePath := binPath + "../log/system.log"
+	logFilePath := binPath + "/../log/system.log"
 
 	// 打开日志文件
 	file, err := os.Open(logFilePath)

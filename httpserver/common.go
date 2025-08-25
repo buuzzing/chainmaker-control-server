@@ -19,14 +19,17 @@ const (
 	StopChainPath = "/stopChain"
 	// CleanChainPath 清理链数据请求路径
 	CleanChainPath = "/cleanChain"
+
+	// CheckStatusPath 查询链节点状态请求路径
+	CheckStatusPath = "/checkStatus"
 )
 
 // NodeAddrs 长安链节点列表
 var NodeAddrs = map[string]string{
-	"Server5": "39.99.41.202",
-	"Server6": "47.111.78.240",
-	"Server7": "115.29.212.238",
-	"Server8": "112.74.104.251",
+	"Server5": "39.99.41.202:60082",
+	"Server6": "47.111.78.240:60082",
+	"Server7": "115.29.212.238:60082",
+	"Server8": "112.74.104.251:60082",
 }
 
 // GetNodeName 获取长安链节点名称
