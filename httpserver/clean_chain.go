@@ -30,22 +30,19 @@ func HandleCleanNode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "获取 Chainmaker bin 路径失败: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	cleanPath := binPath + "../"
+	cleanPath := binPath + "/../"
 
 	// 数据目录
 	cmd := exec.Command("rm", "-rf", cleanPath+"data")
-	_ = cmd.Start()
-	_ = cmd.Wait()
+	_ = cmd.Run()
 	// 无法删除的部分移动到 /tmp 目录
 	tmpName := fmt.Sprintf("/tmp/%s-%s", time.Now().Format("20060102150405"), nodeName)
 	cmd = exec.Command("mv", cleanPath+"data/go", tmpName)
-	_ = cmd.Start()
-	_ = cmd.Wait()
+	_ = cmd.Run()
 
 	// 日志
-	cmd = exec.Command("rm", "-rf", cleanPath+"log", "bin/panic.log")
-	_ = cmd.Start()
-	_ = cmd.Wait()
+	cmd = exec.Command("rm", "-rf", cleanPath+"log", cleanPath+"bin/panic.log")
+	_ = cmd.Run()
 
 	w.WriteHeader(http.StatusOK)
 }

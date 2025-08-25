@@ -6,6 +6,9 @@ import (
 	"io"
 	"net/http"
 	"os/exec"
+	"strings"
+
+	clog "github.com/kpango/glg"
 )
 
 // HandleStopNode 停止链节点
@@ -30,10 +33,12 @@ func HandleStopNode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "获取 Chainmaker bin 路径失败: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	startBinPath := binPath + "/stop.sh"
+
+	command := fmt.Sprintf("cd %s && ./stop.sh full", binPath)
+	clog.Debugf("停止节点 %s 命令: %s", nodeName, command)
 
 	// 执行启动命令
-	cmd := exec.Command(startBinPath, "full")
+	cmd := exec.Command("bash", "-c", command)
 
 	// 获取 stdout 管道
 	stdout, err := cmd.StdoutPipe()
@@ -49,7 +54,10 @@ func HandleStopNode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 使用 http.ResponseWriter 写入响应
-	io.Copy(w, stdout)
+	var builder strings.Builder
+	tee := io.TeeReader(stdout, &builder)
+	io.Copy(w, tee)
+	output := builder.String()
 
 	// 等待命令执行完成
 	if err := cmd.Wait(); err != nil {
@@ -57,10 +65,13 @@ func HandleStopNode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// 输出日志信息
+	clog.Infof("节点 %s 停止完成", nodeName)
+	clog.Debugf("节点 %s 输出: %s", nodeName, output)
+
 	// 写入完成响应
-	w.WriteHeader(http.StatusOK)
-	msg := fmt.Sprintf("长安链节点 %s 启动完成\n", nodeName)
-	io.WriteString(w, msg)
+	msg := fmt.Sprintf("长安链节点 %s 停止完成\n", nodeName)
+	w.Write([]byte(msg))
 }
 
 // HandleStopChain 停止长安链
