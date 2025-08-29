@@ -12,6 +12,8 @@ const (
 	StopNodePath = "/stopNode"
 	// CleanNodePath 清理链节点数据请求路径
 	CleanNodePath = "/cleanNode"
+	// CheckNodePath 查询链节点状态请求路径
+	CheckNodePath = "/checkNode"
 
 	// StartChainPath 启动链请求路径
 	StartChainPath = "/startChain"
@@ -19,9 +21,8 @@ const (
 	StopChainPath = "/stopChain"
 	// CleanChainPath 清理链数据请求路径
 	CleanChainPath = "/cleanChain"
-
-	// CheckStatusPath 查询链节点状态请求路径
-	CheckStatusPath = "/checkStatus"
+	// CheckChainPath 查询链状态请求路径
+	CheckChainPath = "/checkChain"
 )
 
 // NodeAddrs 长安链节点列表

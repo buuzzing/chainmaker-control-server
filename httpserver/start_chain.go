@@ -1,12 +1,10 @@
 package httpserver
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"os/exec"
 	"strings"
 	"time"
@@ -60,13 +58,13 @@ func HandleStartNode(w http.ResponseWriter, r *http.Request) {
 	var builder strings.Builder
 	tee := io.TeeReader(stdout, &builder)
 	go io.Copy(w, tee)
-	
+
 	// 等待命令执行完成
 	if err := cmd.Wait(); err != nil {
 		http.Error(w, "命令执行失败: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
+
 	// 输出日志信息
 	output := builder.String()
 	clog.Infof("节点 %s 启动完成", nodeName)
@@ -75,47 +73,6 @@ func HandleStartNode(w http.ResponseWriter, r *http.Request) {
 	// 写入完成响应
 	msg := fmt.Sprintf("长安链节点 %s 启动完成\n", nodeName)
 	w.Write([]byte(msg))
-}
-
-// HandleCheckChainStatus 检查链状态
-func HandleCheckChainStatus(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	if r.Method != http.MethodGet {
-		msg := fmt.Sprintf("请求方法 %s 不允许", r.Method)
-		http.Error(w, msg, http.StatusMethodNotAllowed)
-		return
-	}
-
-	// 获取节点名称
-	nodeName, err := GetNodeName()
-	if err != nil {
-		http.Error(w, "获取节点名称失败: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// 检查日志文件中是否包含 "all necessary"
-	found, err := checkAllNecessary()
-	if err != nil {
-		http.Error(w, "检查日志文件失败: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	var resp Response
-	if found {
-		resp = Response{
-			Status:  "success",
-			Message: fmt.Sprintf("节点 %s 已启动并运行正常", nodeName),
-		}
-	} else {
-		resp = Response{
-			Status:  "error",
-			Message: fmt.Sprintf("节点 %s 未启动或运行异常", nodeName),
-		}
-	}
-
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(resp)
 }
 
 // HandleStartChain 启动链
@@ -158,60 +115,41 @@ func HandleStartChain(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	time.Sleep(5 * time.Second)
+	time.Sleep(20 * time.Second)
 	// 检查链状态
-	found, err := checkAllNecessary()
+	statusResp, err := http.Get(fmt.Sprintf("http://%s%s", NodeAddrs["Server5"], CheckChainPath))
 	if err != nil {
-		http.Error(w, "检查日志文件失败: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "检查链状态失败: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if statusResp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(statusResp.Body)
+		statusResp.Body.Close()
+		http.Error(w, "检查链状态失败: "+string(body), http.StatusInternalServerError)
+		return
+	}
+	var status Response
+	err = json.NewDecoder(statusResp.Body).Decode(&status)
+	statusResp.Body.Close()
+	if err != nil {
+		http.Error(w, "解析链状态响应失败: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	var resp Response
-	if found {
+	if status.Status == "success" {
 		resp = Response{
 			Status:  "success",
-			Message: "长安链启动成功",
+			Message: "长安链启动成功，\n" + status.Message,
 		}
 	} else {
 		resp = Response{
 			Status:  "error",
-			Message: "长安链启动失败",
+			Message: "长安链启动失败，\n" + status.Message,
 		}
 	}
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(resp)
 
-}
-
-// 检查日志文件中是否包含 "all necessary"
-func checkAllNecessary() (bool, error) {
-	// 日志路径
-	binPath, err := GetChainmakerBinPath()
-	if err != nil {
-		return false, err
-	}
-	logFilePath := binPath + "/../log/system.log"
-
-	// 打开日志文件
-	file, err := os.Open(logFilePath)
-	if err != nil {
-		return false, err
-	}
-	defer file.Close()
-
-	// 逐行扫描日志文件
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(line, "all necessary") {
-			return true, nil
-		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		return false, err
-	}
-
-	return false, nil
 }

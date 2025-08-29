@@ -27,10 +27,12 @@ func main() {
 	engine.Handle(httpserver.StartNodePath, httpserver.HandleStartNode)
 	engine.Handle(httpserver.StopNodePath, httpserver.HandleStopNode)
 	engine.Handle(httpserver.CleanNodePath, httpserver.HandleCleanNode)
+	engine.Handle(httpserver.CheckNodePath, httpserver.HandleCheckNode)
+
 	engine.Handle(httpserver.StartChainPath, httpserver.HandleStartChain)
 	engine.Handle(httpserver.StopChainPath, httpserver.HandleStopChain)
 	engine.Handle(httpserver.CleanChainPath, httpserver.HandleCleanChain)
-	engine.Handle(httpserver.CheckStatusPath, httpserver.HandleCheckChainStatus)
+	engine.Handle(httpserver.CheckChainPath, httpserver.HandleCheckChain)
 
 	// 启动 HTTP 服务
 	if err := engine.Start(); err != nil {
