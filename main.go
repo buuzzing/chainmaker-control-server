@@ -31,7 +31,7 @@ func main() {
 	engine.Handle(httpserver.StopRelayerPath, httpserver.HandleStopRelayer)
 
 	// 监控 relayer 日志
-	engine.Handle("/subscribeRelayer", httpserver.HandleSubscribeRelayer)
+	engine.Handle(httpserver.SubscribeRelayerPath, httpserver.HandleSubscribeRelayer)
 
 	// 启动单个链节点
 	engine.Handle(httpserver.StartNodePath, httpserver.HandleStartNode)

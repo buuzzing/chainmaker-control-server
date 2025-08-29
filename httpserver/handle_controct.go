@@ -11,6 +11,7 @@ import (
 	clog "github.com/kpango/glg"
 )
 
+// HandleSetupContracts 处理部署合约的请求
 func HandleSetupContracts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.Header().Set("Transfer-Encoding", "chunked")

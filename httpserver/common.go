@@ -32,8 +32,11 @@ const (
 	// StopRelayerPath 停止 relayer 请求路径
 	StopRelayerPath = "/stop-relayer"
 
-	// DeployContractsPath 部署合约请求路径
+	// SetupContractsPath 部署合约请求路径
 	SetupContractsPath = "/setup-contracts"
+
+	// SubscribeRelayerPath 监听 relayer 日志请求路径
+	SubscribeRelayerPath = "/subscribe-relayer"
 )
 
 // NodeAddrs 长安链节点列表
