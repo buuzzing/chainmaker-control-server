@@ -6,23 +6,26 @@ import (
 )
 
 const (
+	// ReceiveConfPath 接收配置文件请求路径
+	ReceiveConfPath = "/receive-conf"
+
 	// StartNodePath 启动链节点请求路径
-	StartNodePath = "/startNode"
+	StartNodePath = "/start-node"
 	// StopNodePath 停止链节点请求路径
-	StopNodePath = "/stopNode"
+	StopNodePath = "/stop-node"
 	// CleanNodePath 清理链节点数据请求路径
-	CleanNodePath = "/cleanNode"
+	CleanNodePath = "/clean-node"
 	// CheckNodePath 查询链节点状态请求路径
-	CheckNodePath = "/checkNode"
+	CheckNodePath = "/check-node"
 
 	// StartChainPath 启动链请求路径
-	StartChainPath = "/startChain"
+	StartChainPath = "/start-chain"
 	// StopChainPath 停止链请求路径
-	StopChainPath = "/stopChain"
+	StopChainPath = "/stop-chain"
 	// CleanChainPath 清理链数据请求路径
-	CleanChainPath = "/cleanChain"
+	CleanChainPath = "/clean-chain"
 	// CheckChainPath 查询链状态请求路径
-	CheckChainPath = "/checkChain"
+	CheckChainPath = "/check-chain"
 )
 
 // NodeAddrs 长安链节点列表
