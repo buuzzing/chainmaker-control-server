@@ -115,7 +115,7 @@ func HandleStartChain(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	time.Sleep(20 * time.Second)
+	time.Sleep(8 * time.Second)
 	// 检查链状态
 	statusResp, err := http.Get(fmt.Sprintf("http://%s%s", NodeAddrs["Server5"], CheckChainPath))
 	if err != nil {

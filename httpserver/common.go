@@ -6,9 +6,6 @@ import (
 )
 
 const (
-	// ReceiveConfPath 接收配置文件请求路径
-	ReceiveConfPath = "/receive-conf"
-
 	// StartNodePath 启动链节点请求路径
 	StartNodePath = "/start-node"
 	// StopNodePath 停止链节点请求路径
@@ -26,6 +23,17 @@ const (
 	CleanChainPath = "/clean-chain"
 	// CheckChainPath 查询链状态请求路径
 	CheckChainPath = "/check-chain"
+
+	// ReceiveConfPath 接收配置文件请求路径
+	ReceiveConfPath = "/receive-conf"
+
+	// StartRelayerPath 启动 relayer 请求路径
+	StartRelayerPath = "/start-relayer"
+	// StopRelayerPath 停止 relayer 请求路径
+	StopRelayerPath = "/stop-relayer"
+
+	// DeployContractsPath 部署合约请求路径
+	SetupContractsPath = "/setup-contracts"
 )
 
 // NodeAddrs 长安链节点列表
@@ -52,4 +60,17 @@ func GetChainmakerBinPath() (string, error) {
 		return "", err
 	}
 	return fmt.Sprintf("/home/chainmaker/chainmaker/chainmaker-v2.3.5-%s/bin", nodeName), nil
+}
+
+// AllowHandleRelayer 判断当前节点是否允许操作 relayer
+// 只有 node1 和 node2 所在服务器允许操作 relayer
+func AllowHandleRelayer() bool {
+	nodeName, err := GetNodeName()
+	if err != nil {
+		return false
+	}
+	if nodeName == "node1" || nodeName == "node2" {
+		return true
+	}
+	return false
 }
